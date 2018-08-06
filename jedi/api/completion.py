@@ -3,7 +3,7 @@ from parso.python import tree
 from parso.tree import search_ancestor, Leaf
 
 from jedi._compatibility import Parameter
-from jedi import debug
+from jedi import debug, init_speed_hacks
 from jedi import settings
 from jedi.api import classes
 from jedi.api import helpers
@@ -91,6 +91,14 @@ class Completion:
         self._like_name = helpers.get_on_completion_name(self._module_node, code_lines, position)
         # The actual cursor position is not what we need to calculate
         # everything. We want the start of the name we're on.
+
+        # Some hacks to increase speed of Jedi
+        current_line = self._code_lines[position[0] - 1]
+        if '.' not in current_line and '(' not in current_line:
+            init_speed_hacks(True)
+        else:
+            init_speed_hacks(False)
+
         self._position = position[0], position[1] - len(self._like_name)
         self._call_signatures_method = call_signatures_method
 
