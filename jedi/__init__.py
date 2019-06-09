@@ -38,6 +38,14 @@ good text editor, while still having very good IDE features for Python.
 
 __version__ = '0.14.0'
 
+def init_speed_hacks(on):
+    global speed_hacks
+    speed_hacks = on
+
+def speed_hacks():
+    global speed_hacks
+    return speed_hacks
+
 from jedi.api import Script, Interpreter, set_debug_function, \
     preload_module, names
 from jedi import settings

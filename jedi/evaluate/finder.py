@@ -17,7 +17,7 @@ check for -> a is a string). There's big potential in these checks.
 
 from parso.python import tree
 from parso.tree import search_ancestor
-from jedi import debug
+from jedi import debug, speed_hacks
 from jedi import settings
 from jedi.evaluate import compiled
 from jedi.evaluate import analysis
@@ -53,6 +53,9 @@ class NameFinder(object):
         :params bool attribute_lookup: Tell to logic if we're accessing the
             attribute or the contents of e.g. a function.
         """
+        if speed_hacks():
+            return ContextSet()
+
         names = self.filter_name(filters)
         if self._found_predefined_types is not None and names:
             check = flow_analysis.reachability_check(
